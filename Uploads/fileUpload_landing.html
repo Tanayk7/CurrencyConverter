@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>This is a landing page</h1>
+    <button id="trigger-event">Click me</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+      const socket = io("http://localhost:3000");
+      socket.on("onConnect", (data) => {
+        console.log(data);
+      });
+
+      let trigger = document.getElementById("trigger-event");
+      trigger.addEventListener("click", (e) => {
+        console.log("button clicked");
+        let text = "User clicked button";
+        socket.emit("clicked", text);
+      });
+    </script>
+  </body>
+</html>

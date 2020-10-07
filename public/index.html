@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="app">
+        <h1 class="app-title">Currency Converter 1.0</h1>
+        <h3 class="app-tagline">Convert Currency from Rupees to US Dollars</h3>
+        <form id="uploadForm">
+          <input
+            type="text"
+            class="file-name-input"
+            readonly
+            placeholder="Choose file"
+          />
+          <button id="file-input-trigger" class="button-styled">
+            Browse CSV File
+          </button>
+          <input
+            type="file"
+            name="fileUpload"
+            required
+            id="file-input"
+            style="display: none"
+          />
+          <button class="button-styled" type="submit" id="btnSubmit">
+            Convert
+          </button>
+        </form>
+
+        <div class="conversion-info">
+          <div class="conversion-rate">Conversion Rate:</div>
+          <div class="updated-date-time">Updated On:</div>
+        </div>
+
+        <div class="converted_prices">
+          <div class="converted-header">
+            <div class="converted-header-value">Original</div>
+            <div class="converted-header-value">Converted</div>
+          </div>
+          <!-- <div class="converted-row">
+            <div class="converted-value">10</div>
+            <div class="converted-value">730</div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <h5 id="upload-response"></h5>
+
+    <script>
+      let file_input_trigger = document.getElementById("file-input-trigger");
+      let file_input = document.getElementById("file-input");
+      let file_name_input = document.querySelector(".file-name-input");
+
+      file_input.addEventListener("change", (e) => {
+        var filename = file_input.files[0].name;
+        file_name_input.placeholder = filename;
+      });
+      file_input_trigger.addEventListener("click", (e) => {
+        file_input.click();
+      });
+    </script>
+    <script>
+      let uploadForm = document.getElementById("uploadForm");
+      let upload_reponse = document.getElementById("upload-response");
+      uploadForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let formData = new FormData(e.target);
+        fetch("http://localhost:5000/getConverted", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            return response.text();
+          })
+          .then((text) => {
+            console.log(text);
+            let obj = JSON.parse(text);
+            console.log(obj);
+            let conversion_rate = document.querySelector(".conversion-rate");
+            conversion_rate.innerHTML =
+              "Conversion Rate: " + obj.conversion_rate;
+
+            let updated_date_time = document.querySelector(
+              ".updated-date-time"
+            );
+            updated_date_time.innerHTML = "Updated On: " + obj.update_time;
+
+            let converted_prices = document.querySelector(".converted_prices");
+            obj.prices.forEach((price) => {
+              let row = document.createElement("div");
+              row.classList.add("converted-row");
+
+              let val1 = document.createElement("div");
+              val1.classList.add("converted-value");
+              val1.innerHTML = price.original;
+
+              let val2 = document.createElement("div");
+              val2.classList.add("converted-value");
+              val2.innerHTML = price.converted;
+
+              row.appendChild(val1);
+              row.appendChild(val2);
+              converted_prices.appendChild(row);
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    </script>
+  </body>
+</html>

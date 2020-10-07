@@ -1,0 +1,135 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #2c253b;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  display: grid;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+.app {
+  justify-self: center;
+  padding-top: 25px;
+}
+
+.app-title {
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0;
+}
+
+.app-tagline {
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  font-size: 15px;
+  margin: 0;
+  color: #b795ff;
+  margin-bottom: 25px;
+}
+
+#uploadForm {
+  justify-self: center;
+  margin-bottom: 15px;
+}
+
+.button-styled {
+  background: #48376e;
+  color: white;
+  outline: none;
+  padding: 10px;
+  border: none;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.button-styled:hover {
+  cursor: pointer;
+  background: #755fa3;
+}
+
+.styled-input {
+  border: none;
+  outline: none;
+  padding: 10px;
+  color: white;
+  background: #48376e;
+}
+
+.file-name-input {
+  background: #aa98d3;
+  border: 1px solid #b795ff;
+  padding: 10px;
+  outline: none;
+  margin: 0px;
+}
+
+#file-input-trigger {
+  margin-right: 10px;
+}
+
+.file-name-input::placeholder {
+  color: black;
+}
+
+.conversion-info {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 15px;
+}
+
+.updated-date-time,
+.conversion-rate {
+  color: white;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
+.converted_prices {
+  width: 100%;
+}
+
+.converted-row,
+.converted-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 10px;
+  border: 1px solid #b795ff;
+  background: #544475;
+  color: white;
+  text-align: center;
+}
+
+.converted-header {
+  font-weight: 500;
+  font-size: 18px;
+}
