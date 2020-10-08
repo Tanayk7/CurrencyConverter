@@ -6,6 +6,7 @@ const multer = require("multer");
 const axios = require("axios");
 //Utils
 const convertToJson = require("./Utils/csvToJson.js");
+const sendMail = require("./Utils/mailer.js");
 
 // Constants
 const USD_ENDPOINT =
@@ -32,7 +33,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "./public")));
 
 // Routes
-
 app.get("/", (req, res) => {
   res.sendFile("index.html");
 });
@@ -71,6 +71,38 @@ app.post("/getConverted", (req, res) => {
         res.send(converted);
       }
     });
+  });
+});
+
+app.post("/emailResults", (req, res) => {
+  let email = req.body.email;
+  let results = req.body.results;
+  console.log(results);
+
+  let rows = "";
+  results.prices.forEach((price) => {
+    rows += `<tr> 
+                <td>${price.original}</td>
+                <td>${price.converted}</td>  
+             </tr>`;
+  });
+  let html = `<table border='1' style='padding:10px;background:#48376e;border:1px solid #755fa3;color:white;'>
+                <thead style='padding:5px;'>
+                  <tr> 
+                    <th>Price In INR</th>
+                    <th>Price In USD</th> 
+                  </tr> 
+                </thead> 
+                <tbody tyle='padding:5px;'> 
+                  ${rows}
+                </tbody> 
+             </table>`;
+
+  sendMail(res, {
+    from: "Currency Converter",
+    to: email,
+    subject: "Currency conversion results",
+    html: html,
   });
 });
 

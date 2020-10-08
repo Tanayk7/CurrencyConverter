@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: #2c253b;
+  background: #211930;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
@@ -15,7 +15,7 @@ body {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-  display: grid;
+  /* display: grid; */
 }
 @media (min-width: 768px) {
   .container {
@@ -59,7 +59,9 @@ body {
   justify-self: center;
   margin-bottom: 15px;
 }
-
+#email-form {
+  margin-bottom: 15px;
+}
 .button-styled {
   background: #48376e;
   color: white;
@@ -83,20 +85,19 @@ body {
   background: #48376e;
 }
 
-.file-name-input {
+.input-styled {
   background: #aa98d3;
   border: 1px solid #b795ff;
   padding: 10px;
   outline: none;
   margin: 0px;
 }
+.input-styled::placeholder {
+  color: black;
+}
 
 #file-input-trigger {
   margin-right: 10px;
-}
-
-.file-name-input::placeholder {
-  color: black;
 }
 
 .conversion-info {
@@ -109,12 +110,13 @@ body {
 .updated-date-time,
 .conversion-rate {
   color: white;
-  font-size: 16px;
+  font-size: 24px;
   text-transform: capitalize;
 }
 
 .converted_prices {
   width: 100%;
+  margin-bottom: 25px;
 }
 
 .converted-row,
@@ -132,4 +134,92 @@ body {
 .converted-header {
   font-weight: 500;
   font-size: 18px;
+}
+
+.conversion-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.stat {
+  width: 272px;
+  padding: 10px;
+  background: #604c8d;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: flex;
+}
+
+.stat-value {
+  font-size: 35px;
+  font-weight: 400;
+  color: #e0d0ff;
+  letter-spacing: 1.5px;
+}
+
+.stat-text {
+  margin: auto;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.button-disabled,
+.input-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.notif-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 15px;
+}
+
+.email-notification {
+  opacity: 0;
+  padding: 20px;
+  color: white;
+  background: rgb(45, 48, 58);
+}
+
+.check-icon {
+  font-size: 25px;
+  color: rgb(63, 253, 174);
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.notif-enter {
+  animation: enter 0.2s ease-out;
+  animation-fill-mode: forwards;
+}
+.notif-leave {
+  animation: leave 0.2s ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes leave {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes enter {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

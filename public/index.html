@@ -4,9 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/loader.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
     <title>Document</title>
   </head>
   <body>
+    <div class="loader-container">
+      <div class="loader"></div>
+    </div>
+
     <div class="container">
       <div class="app">
         <h1 class="app-title">Currency Converter 1.0</h1>
@@ -14,7 +23,7 @@
         <form id="uploadForm">
           <input
             type="text"
-            class="file-name-input"
+            class="file-name-input input-styled"
             readonly
             placeholder="Choose file"
           />
@@ -33,26 +42,84 @@
           </button>
         </form>
 
+        <form id="email-form">
+          <input
+            type="text"
+            name="email"
+            placeholder="Enter Email"
+            class="input-styled"
+            id="email-input"
+            required
+          />
+          <button class="button-styled" type="submit" id="emailSubmit">
+            Email Results
+          </button>
+        </form>
+
         <div class="conversion-info">
-          <div class="conversion-rate">Conversion Rate:</div>
-          <div class="updated-date-time">Updated On:</div>
+          <div class="conversion-rate">Conversion Rate: _ _</div>
+          <div class="updated-date-time">Updated On: _ _</div>
+        </div>
+
+        <div class="conversion-stats">
+          <div class="stat">
+            <div class="stat-text">Average</div>
+            <div class="stat-value" id="mean-value">_ _</div>
+          </div>
+          <div class="stat">
+            <div class="stat-text">Median</div>
+            <div class="stat-value" id="median-value">_ _</div>
+          </div>
+          <div class="stat">
+            <div class="stat-text">Minimum</div>
+            <div class="stat-value" id="minimum-value">_ _</div>
+          </div>
+          <div class="stat">
+            <div class="stat-text">Maximum</div>
+            <div class="stat-value" id="maximum-value">_ _</div>
+          </div>
         </div>
 
         <div class="converted_prices">
           <div class="converted-header">
-            <div class="converted-header-value">Original</div>
-            <div class="converted-header-value">Converted</div>
+            <div class="converted-header-value">INR</div>
+            <div class="converted-header-value">USD</div>
           </div>
-          <!-- <div class="converted-row">
-            <div class="converted-value">10</div>
-            <div class="converted-value">730</div>
-          </div> -->
         </div>
       </div>
     </div>
 
-    <h5 id="upload-response"></h5>
+    <div class="notif-container">
+      <div class="email-notification">
+        <i class="material-icons check-icon">check_circle</i> Email sent
+        successfully
+      </div>
+    </div>
 
+    <!-- TO TRIGGER NOTIFICATIONS -->
+    <script>
+      let email_notification = document.querySelector(".email-notification");
+      function trigger_notification(message) {
+        let leave_present = false;
+        for (let i of email_notification.classList) {
+          if (i === "notif-leave") {
+            leave_present = true;
+            break;
+          }
+        }
+        if (leave_present) {
+          email_notification.classList.remove("notif-leave");
+        }
+        email_notification.innerHTML =
+          "<i class='material-icons check-icon'>check_circle</i>" + message;
+        email_notification.classList.add("notif-enter");
+        setTimeout(() => {
+          email_notification.classList.add("notif-leave");
+          email_notification.classList.remove("notif-enter");
+        }, 2000);
+      }
+    </script>
+    <!-- ADD CUSTOM TRIGGER TO FILE INPUT  -->
     <script>
       let file_input_trigger = document.getElementById("file-input-trigger");
       let file_input = document.getElementById("file-input");
@@ -66,11 +133,27 @@
         file_input.click();
       });
     </script>
+
+    <!-- DISABLE EMAIL INPUT AND BUTTON -->
+    <script>
+      let loader = document.querySelector(".loader-container");
+      let email_input = document.getElementById("email-input");
+      let email_submit = document.getElementById("emailSubmit");
+      document.addEventListener("DOMContentLoaded", (e) => {
+        email_input.classList.add("input-disabled");
+        email_submit.classList.add("button-disabled");
+      });
+    </script>
+
+    <!-- UPLOAD FORM -->
     <script>
       let uploadForm = document.getElementById("uploadForm");
       let upload_reponse = document.getElementById("upload-response");
+      let results;
+
       uploadForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        loader.style.display = "flex";
         let formData = new FormData(e.target);
         fetch("http://localhost:5000/getConverted", {
           method: "POST",
@@ -82,6 +165,7 @@
           .then((text) => {
             console.log(text);
             let obj = JSON.parse(text);
+            results = { ...obj };
             console.log(obj);
             let conversion_rate = document.querySelector(".conversion-rate");
             conversion_rate.innerHTML =
@@ -109,10 +193,80 @@
               row.appendChild(val2);
               converted_prices.appendChild(row);
             });
+
+            let prices = [];
+            results.prices.forEach((price) => {
+              prices.push(parseInt(price.original));
+            });
+            console.log(prices);
+
+            //Median
+            const findMedian = (arr) => {
+              const mid = Math.floor(arr.length / 2),
+                nums = [...arr].sort((a, b) => a - b);
+              return arr.length % 2 !== 0
+                ? nums[mid]
+                : (nums[mid - 1] + nums[mid]) / 2;
+            };
+            let median = findMedian(prices);
+            document.getElementById("median-value").innerHTML = "₹" + median;
+
+            //Average
+            let mean = 0;
+            let sum = 0;
+            prices.forEach((price) => {
+              sum += parseInt(price);
+            });
+            mean = sum / prices.length;
+            mean = Math.floor(mean.toFixed(2));
+            document.getElementById("mean-value").innerHTML = "₹" + mean;
+
+            //Min
+            let min = 0;
+            min = Math.min(...prices);
+            document.getElementById("minimum-value").innerHTML = "₹" + min;
+            //Max
+            let max = 0;
+            max = Math.max(...prices);
+            document.getElementById("maximum-value").innerHTML = "₹" + max;
+
+            console.log("Mean: ", mean);
+            console.log("Median: ", median);
+            console.log(min);
+            console.log(max);
+
+            email_input.classList.remove("input-disabled");
+            email_submit.classList.remove("button-disabled");
+            loader.style.display = "none";
+            trigger_notification("Results generated");
           })
           .catch((error) => {
             console.log(error);
           });
+      });
+    </script>
+
+    <!-- EMAIL FORM -->
+    <script>
+      let emailForm = document.getElementById("email-form");
+      emailForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        loader.style.display = "flex";
+        let data = {
+          email: email_input.value,
+          results: results,
+        };
+        let result = await fetch("http://localhost:5000/emailResults", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        let result_json = await result.json();
+        loader.style.display = "none";
+        console.log(result_json);
+        trigger_notification("Email sent successfully");
       });
     </script>
   </body>
