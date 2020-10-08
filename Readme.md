@@ -25,9 +25,9 @@ How to run
     run - touch .env (to create a .env file)
 </li>
 <li>
-    Add the following in .env
-    <b>EMAIL_USERNAME='add gmail username (email)'</b>
-    <b>EMAIL_PASSWORD='add gmail password'</b>
+    Add the following in .env file <br>
+    <b>EMAIL_USERNAME='add gmail username (email)'</b> <br>
+    <b>EMAIL_PASSWORD='add gmail password'</b> <br>
 </li>
 <li>
     run - npm start 
