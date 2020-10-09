@@ -1,5 +1,5 @@
 <h1>
-Currency Converter app using ExpressJS and PUG in NodeJS
+Currency Converter app using ExpressJS
 </h1>
 
 <h2>
