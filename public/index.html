@@ -155,7 +155,7 @@
         e.preventDefault();
         loader.style.display = "flex";
         let formData = new FormData(e.target);
-        fetch("http://18.224.18.109:9000/getConverted", {
+        fetch("https://currencyconvertsimple.herokuapp.com//getConverted", {
           method: "POST",
           body: formData,
         })
@@ -256,7 +256,7 @@
           email: email_input.value,
           results: results,
         };
-        let result = await fetch("http://18.224.18.109:9000/emailResults", {
+        let result = await fetch("https://currencyconvertsimple.herokuapp.com//emailResults", {
           method: "POST",
           body: JSON.stringify(data),
           headers: {
