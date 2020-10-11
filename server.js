@@ -11,7 +11,7 @@ const sendMail = require("./Utils/mailer.js");
 // Constants
 const USD_ENDPOINT =
   "https://v6.exchangerate-api.com/v6/b7a212f360315bd9a05e699a/latest/USD";
-const PORT = 9000;
+const PORT = process.env.PORT || 9000;
 
 // Init app
 const app = express();
